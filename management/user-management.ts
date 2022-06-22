@@ -4,7 +4,7 @@ import {Role} from "../model/role";
 
 export class UserManagement implements IUserManagement {
     private static users: User[] = [];
-    private static id: number = 2;
+    private static id: number = 1;
 
     constructor() {
         let admin = new User('admin', '123456', 'admin@gmail.com', 'ADMIN');
