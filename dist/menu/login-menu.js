@@ -52,6 +52,7 @@ class LoginMenu {
                 console.log('Định dạng email không hợp lệ!');
             }
             else {
+                isValidEmail = true;
                 let currentUser = this.userManagement.findByEmail(email);
                 if (currentUser) {
                     console.log('Email đã tồn tại');
