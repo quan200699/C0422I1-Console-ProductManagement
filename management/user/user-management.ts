@@ -1,6 +1,6 @@
-import {User} from "../model/user";
+import {User} from "../../model/user";
 import {IUserManagement} from "./i-user-management";
-import {Role} from "../model/role";
+import {Role} from "../../model/role";
 
 export class UserManagement implements IUserManagement {
     private static users: User[] = [];
@@ -67,4 +67,12 @@ export class UserManagement implements IUserManagement {
         return null;
     }
 
+    login(username: string, password: string): User | null {
+        for (let user of UserManagement.users) {
+            if (username == user.username && password == user.password) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

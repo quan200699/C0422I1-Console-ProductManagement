@@ -20,9 +20,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginMenu = void 0;
-const user_management_1 = require("../management/user-management");
+const user_management_1 = require("../management/user/user-management");
 const user_1 = require("../model/user");
 const rl = __importStar(require("readline-sync"));
+const role_1 = require("../model/role");
+const admin_menu_1 = require("./admin-menu");
 var LoginChoice;
 (function (LoginChoice) {
     LoginChoice[LoginChoice["LOGIN"] = 1] = "LOGIN";
@@ -31,6 +33,7 @@ var LoginChoice;
 class LoginMenu {
     constructor() {
         this.userManagement = new user_management_1.UserManagement();
+        this.adminMenu = new admin_menu_1.AdminMenu();
     }
     inputUser() {
         let username = this.inputUsername();
@@ -116,17 +119,49 @@ class LoginMenu {
             switch (choice) {
                 case LoginChoice.LOGIN: {
                     console.log('---Đăng nhập---');
+                    this.loginForm();
                     break;
                 }
                 case LoginChoice.REGISTER: {
                     console.log('---Đăng ký tài khoản---');
-                    let user = this.inputUser();
-                    this.userManagement.createNew(user);
-                    console.log('Đăng ký thành công!');
+                    this.registerForm();
                     break;
                 }
             }
         } while (choice != 0);
+    }
+    registerForm() {
+        let user = this.inputUser();
+        this.userManagement.createNew(user);
+        console.log('Đăng ký thành công!');
+    }
+    loginForm() {
+        let username = rl.question('Nhập tài khoản:');
+        let password = rl.question('Nhập mật khẩu:');
+        /*
+        current user là lấy ra giá trị của user đang đăng nhập.
+        Nếu username và password không đúng thì current user = null
+        * */
+        let currentUser = this.userManagement.login(username, password);
+        if (currentUser) {
+            console.log('Đăng nhập thành công!');
+            //Check role => admin thì mở menu admin, user mở menu user
+            if (currentUser.role == role_1.Role.ADMIN) {
+                //mở menu admin
+                this.adminMenu.run();
+            }
+            else {
+                //mở menu user
+                console.log('---Bán hàng---');
+                console.log('1. Thêm sản phẩm vào giỏ hàng');
+                console.log('2. Mua hàng');
+                console.log('3. Thanh toán');
+                console.log('0. Đăng xuất');
+            }
+        }
+        else {
+            console.log('Tài khoản hoặc mật khẩu không đúng!');
+        }
     }
 }
 exports.LoginMenu = LoginMenu;

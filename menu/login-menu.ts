@@ -1,6 +1,8 @@
-import {UserManagement} from "../management/user-management";
+import {UserManagement} from "../management/user/user-management";
 import {User} from "../model/user";
 import * as rl from "readline-sync";
+import {Role} from "../model/role";
+import {AdminMenu} from "./admin-menu";
 
 enum LoginChoice {
     LOGIN = 1,
@@ -9,6 +11,7 @@ enum LoginChoice {
 
 export class LoginMenu {
     private userManagement = new UserManagement();
+    private adminMenu = new AdminMenu();
 
     inputUser(): User {
         let username = this.inputUsername();
@@ -96,17 +99,48 @@ export class LoginMenu {
             switch (choice) {
                 case LoginChoice.LOGIN: {
                     console.log('---Đăng nhập---');
+                    this.loginForm();
                     break;
                 }
                 case LoginChoice.REGISTER: {
                     console.log('---Đăng ký tài khoản---');
-                    let user = this.inputUser();
-                    this.userManagement.createNew(user);
-                    console.log('Đăng ký thành công!')
+                    this.registerForm();
                     break;
                 }
             }
         } while (choice != 0);
     }
 
+    registerForm() {
+        let user = this.inputUser();
+        this.userManagement.createNew(user);
+        console.log('Đăng ký thành công!')
+    }
+
+    loginForm() {
+        let username = rl.question('Nhập tài khoản:');
+        let password = rl.question('Nhập mật khẩu:');
+        /*
+        current user là lấy ra giá trị của user đang đăng nhập.
+        Nếu username và password không đúng thì current user = null
+        * */
+        let currentUser = this.userManagement.login(username, password);
+        if (currentUser) {
+            console.log('Đăng nhập thành công!');
+            //Check role => admin thì mở menu admin, user mở menu user
+            if (currentUser.role == Role.ADMIN) {
+                //mở menu admin
+                this.adminMenu.run();
+            } else {
+                //mở menu user
+                console.log('---Bán hàng---')
+                console.log('1. Thêm sản phẩm vào giỏ hàng')
+                console.log('2. Mua hàng')
+                console.log('3. Thanh toán')
+                console.log('0. Đăng xuất')
+            }
+        } else {
+            console.log('Tài khoản hoặc mật khẩu không đúng!');
+        }
+    }
 }

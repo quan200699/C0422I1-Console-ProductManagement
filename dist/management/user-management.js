@@ -57,6 +57,14 @@ class UserManagement {
         }
         return null;
     }
+    login(username, password) {
+        for (let user of UserManagement.users) {
+            if (username == user.username && password == user.password) {
+                return user;
+            }
+        }
+        return null;
+    }
 }
 exports.UserManagement = UserManagement;
 UserManagement.users = [];
