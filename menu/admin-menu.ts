@@ -1,5 +1,6 @@
 import * as rl from 'readline-sync';
 import {ProductMenu} from "./product-menu";
+import {CategoryMenu} from "./category-menu";
 
 enum AdminChoice {
     PRODUCT_MANAGEMENT = 1,
@@ -8,6 +9,7 @@ enum AdminChoice {
 
 export class AdminMenu {
     private productMenu = new ProductMenu();
+    private categoryMenu = new CategoryMenu();
 
     run() {
         let choice = -1;
@@ -23,7 +25,7 @@ export class AdminMenu {
                     break;
                 }
                 case AdminChoice.CATEGORY_MANAGEMENT: {
-                    console.log('---Quản lý danh mục sản phẩm---');
+                    this.categoryMenu.run();
                     break;
                 }
             }

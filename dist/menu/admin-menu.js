@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminMenu = void 0;
 const rl = __importStar(require("readline-sync"));
 const product_menu_1 = require("./product-menu");
+const category_menu_1 = require("./category-menu");
 var AdminChoice;
 (function (AdminChoice) {
     AdminChoice[AdminChoice["PRODUCT_MANAGEMENT"] = 1] = "PRODUCT_MANAGEMENT";
@@ -30,6 +31,7 @@ var AdminChoice;
 class AdminMenu {
     constructor() {
         this.productMenu = new product_menu_1.ProductMenu();
+        this.categoryMenu = new category_menu_1.CategoryMenu();
     }
     run() {
         let choice = -1;
@@ -45,7 +47,7 @@ class AdminMenu {
                     break;
                 }
                 case AdminChoice.CATEGORY_MANAGEMENT: {
-                    console.log('---Quản lý danh mục sản phẩm---');
+                    this.categoryMenu.run();
                     break;
                 }
             }
